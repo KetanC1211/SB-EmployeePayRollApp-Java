@@ -1,5 +1,7 @@
 package com.bridgelabz.controller;
 
+import com.bridgelabz.converter.EmployeeConverter;
+import com.bridgelabz.dto.EmployeeDTO;
 import com.bridgelabz.model.Employee;
 import com.bridgelabz.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,30 +17,46 @@ public class EmployeeController {
 
     @Autowired
     EmployeeService employeeService;
-
+    @Autowired
+    EmployeeConverter employeeConverter;
     @GetMapping("/displayAll")
-    public List<Employee> list() {
-        return employeeService.listAllEmployee();
+    public List<EmployeeDTO> list() {
+        List<Employee> employeeList = employeeService.listAllEmployee();
+        return employeeConverter.entityToDto(employeeList);
     }
 
     @GetMapping("display/{id}")
-    public ResponseEntity<Employee> get(@PathVariable Integer id) {
+    public ResponseEntity<EmployeeDTO> get(@PathVariable Integer id) {
         try {
             Employee empObj = employeeService.getEmployee(id);
-            return new ResponseEntity<Employee>(empObj, HttpStatus.OK);
+            EmployeeDTO dto = employeeConverter.entityToDto(empObj);
+            return new ResponseEntity<EmployeeDTO>(dto, HttpStatus.OK);
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<EmployeeDTO>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/save")
-    public void add(@RequestBody Employee empObj) {
+    public void add(@RequestBody EmployeeDTO employeeDTO) {
+        Employee empObj = employeeConverter.dtoToEntity(employeeDTO);
         employeeService.saveEmployee(empObj);
     }
 
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<?> update(@RequestBody Employee empObj, @PathVariable Integer id) {
+//        try {
+//            Employee existUser = employeeService.getEmployee(id);
+//            empObj.setId(id);
+//            employeeService.saveEmployee(empObj);
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (NoSuchElementException e) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody Employee empObj, @PathVariable Integer id) {
+    public ResponseEntity<?> update(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
         try {
+            Employee empObj = employeeConverter.dtoToEntity(employeeDTO);
             Employee existUser = employeeService.getEmployee(id);
             empObj.setId(id);
             employeeService.saveEmployee(empObj);
