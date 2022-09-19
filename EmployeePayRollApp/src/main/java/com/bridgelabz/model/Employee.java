@@ -1,25 +1,31 @@
 package com.bridgelabz.model;
 
 
+import com.bridgelabz.dto.EmployeeDTO;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "Employee")
 public class Employee {
 
-
     private int id;
     private String name;
     private double salary;
 
     public Employee() {
-
     }
 
-    public Employee(int id,String name, double salary) {
+    public Employee(int id, String name, double salary) {
         this.id =id;
         this.name = name;
         this.salary = salary;
+    }
+
+    public Employee(Integer id, EmployeeDTO employeeDTO) {
+        this.id = id;
+        this.name = employeeDTO.getName();
+        this.salary = employeeDTO.getSalary();
     }
 
     @Id
@@ -46,6 +52,11 @@ public class Employee {
 
     public void setSalary(double salary) {
         this.salary = salary;
+    }
+
+    public Employee(EmployeeDTO employeeModelDTO){
+        this.name=employeeModelDTO.getName();
+        this.salary=employeeModelDTO.getSalary();
     }
 }
 

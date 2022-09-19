@@ -2,8 +2,10 @@ package com.bridgelabz.controller;
 
 import com.bridgelabz.converter.EmployeeConverter;
 import com.bridgelabz.dto.EmployeeDTO;
+import com.bridgelabz.dto.ResponseDTO;
 import com.bridgelabz.model.Employee;
 import com.bridgelabz.service.EmployeeService;
+import com.bridgelabz.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,60 +15,43 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
-public class EmployeeController {
+public class EmployeeController  {
 
     @Autowired
-    EmployeeService employeeService;
+    IEmployeeService iEmployeeService;
     @Autowired
     EmployeeConverter employeeConverter;
-    @GetMapping("/displayAll")
-    public List<EmployeeDTO> list() {
-        List<Employee> employeeList = employeeService.listAllEmployee();
-        return employeeConverter.entityToDto(employeeList);
-    }
-
-    @GetMapping("display/{id}")
-    public ResponseEntity<EmployeeDTO> get(@PathVariable Integer id) {
-        try {
-            Employee empObj = employeeService.getEmployee(id);
-            EmployeeDTO dto = employeeConverter.entityToDto(empObj);
-            return new ResponseEntity<EmployeeDTO>(dto, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<EmployeeDTO>(HttpStatus.NOT_FOUND);
-        }
-    }
 
     @PostMapping("/save")
-    public void add(@RequestBody EmployeeDTO employeeDTO) {
-        Employee empObj = employeeConverter.dtoToEntity(employeeDTO);
-        employeeService.saveEmployee(empObj);
+    public ResponseEntity<ResponseDTO> getEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        Employee addEmployee = iEmployeeService.add(employeeDTO);
+        ResponseDTO responseDTO=new ResponseDTO("Employee added successfully", addEmployee);
+        return new ResponseEntity(responseDTO, HttpStatus.OK);
     }
 
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<?> update(@RequestBody Employee empObj, @PathVariable Integer id) {
-//        try {
-//            Employee existUser = employeeService.getEmployee(id);
-//            empObj.setId(id);
-//            employeeService.saveEmployee(empObj);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (NoSuchElementException e) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
-        try {
-            Employee empObj = employeeConverter.dtoToEntity(employeeDTO);
-            Employee existUser = employeeService.getEmployee(id);
-            empObj.setId(id);
-            employeeService.saveEmployee(empObj);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    @GetMapping("/displayAll")
+    public ResponseEntity<ResponseDTO> getEmployees() {
+        List<Employee> employeeModel = iEmployeeService.list();
+        ResponseDTO responseDTO=new ResponseDTO("Call for employee successful", employeeModel);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
+
+    @GetMapping("/display/{id}")
+    public ResponseEntity<ResponseDTO> getEmployee(@PathVariable int id) {
+        Employee employeeModel = iEmployeeService.get(id);
+        ResponseDTO responseDTO=new ResponseDTO("Call for Id successful", employeeModel);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ResponseDTO> updateById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
+        ResponseDTO responseDTO=new ResponseDTO("Updated Id successful", iEmployeeService.updateByID(employeeDTO,id));
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Integer id) {
-        employeeService.deleteEmployee(id);
+    public String delete(@PathVariable Integer id) {
+       String message = iEmployeeService.delete(id);
+        return message;
     }
 }

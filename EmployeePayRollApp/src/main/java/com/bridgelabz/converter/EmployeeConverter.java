@@ -23,7 +23,7 @@ public class EmployeeConverter {
     }
 
     public Employee dtoToEntity(EmployeeDTO dto){
-        Employee empObj = new Employee();
+        Employee empObj = new Employee(dto);
         empObj.setId(dto.getId());
         empObj.setName(dto.getName());
         empObj.setSalary(dto.getSalary());

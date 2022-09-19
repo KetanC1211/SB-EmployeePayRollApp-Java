@@ -1,6 +1,6 @@
 package com.bridgelabz.service;
 
-import com.bridgelabz.controller.EmployeeController;
+import com.bridgelabz.dto.EmployeeDTO;
 import com.bridgelabz.model.Employee;
 import com.bridgelabz.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,26 +8,84 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
-public class EmployeeService {
+public class EmployeeService implements IEmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public List<Employee> listAllEmployee() {
-        return employeeRepository.findAll();
+    @Override
+    public Employee add(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee(employeeDTO);
+        employeeRepository.save(employee);
+        return employee;
     }
 
-    public void saveEmployee(Employee user) {
-        employeeRepository.save(user);
+    @Override
+    public List<Employee> list() {
+        List<Employee> employeeModels = employeeRepository.findAll();
+        return employeeModels;
+    }
+    @Override
+    public Employee get(Integer id) {
+        Optional<Employee> employeeModel = employeeRepository.findById(id);
+        return employeeModel.get();
     }
 
-    public Employee getEmployee(Integer id) {
-        return employeeRepository.findById(id).get();
+    @Override
+    public Employee updateByID(EmployeeDTO employeeDTO, Integer id) {
+        if(employeeRepository.findById(id).isPresent()){
+            Employee newEmp = new Employee(id, employeeDTO);
+            Employee search = employeeRepository.save(newEmp);
+            return search;
+        }
+        else{
+            return null;
+        }
     }
 
-    public void deleteEmployee(Integer id) {
-        employeeRepository.deleteById(id);
+    @Override
+    public String delete(Integer id) {
+        if(employeeRepository.findById(id).isPresent()){
+            employeeRepository.deleteById(id);
+            String message = "Deleted succesfully";
+            return message;
+        }
+        else{
+            return "No record Found";
+        }
     }
+
+
+
+//    @Override
+//    public ResponseEntity<?> update(EmployeeDTO employeeDTO, Integer id) {
+//        return null;
+//    }
+//
+//    @Override
+//    public void delete(Integer id) {
+//
+//    }
+//
+//    public List<EmployeeDTO> list() {
+//        List<Employee> empList = employeeRepository.findAll();
+//
+//        return emp;
+//    }
+
+
+//    public void saveEmployee(Employee user) {
+//        employeeRepository.save(user);
+//    }
+//
+//    public Employee getEmployee(Integer id) {
+//        return employeeRepository.findById(id).get();
+//    }
+//
+//    public void deleteEmployee(Integer id) {
+//        employeeRepository.deleteById(id);
+//    }
 }
