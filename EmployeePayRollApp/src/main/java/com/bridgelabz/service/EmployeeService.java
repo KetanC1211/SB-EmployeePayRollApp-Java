@@ -57,35 +57,4 @@ public class EmployeeService implements IEmployeeService {
             return "No record Found";
         }
     }
-
-
-
-//    @Override
-//    public ResponseEntity<?> update(EmployeeDTO employeeDTO, Integer id) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void delete(Integer id) {
-//
-//    }
-//
-//    public List<EmployeeDTO> list() {
-//        List<Employee> empList = employeeRepository.findAll();
-//
-//        return emp;
-//    }
-
-
-//    public void saveEmployee(Employee user) {
-//        employeeRepository.save(user);
-//    }
-//
-//    public Employee getEmployee(Integer id) {
-//        return employeeRepository.findById(id).get();
-//    }
-//
-//    public void deleteEmployee(Integer id) {
-//        employeeRepository.deleteById(id);
-//    }
 }
