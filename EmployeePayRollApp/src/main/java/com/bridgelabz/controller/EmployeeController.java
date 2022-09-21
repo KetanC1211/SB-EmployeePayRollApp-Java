@@ -44,8 +44,8 @@ public class EmployeeController  {
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Integer id) {
-       String message = iEmployeeService.delete(id);
-        return message;
+    public ResponseEntity<ResponseDTO> delete(@PathVariable Integer id) {
+        ResponseDTO responseDTO=new ResponseDTO("Deleting "+id+"...", iEmployeeService.delete(id));
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 }

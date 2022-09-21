@@ -22,4 +22,9 @@ public class ExpectionHandler {
         return new ResponseEntity<ResponseDTO> (responseDTO,HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(EmployeeCustomException.class)
+    public ResponseEntity<ResponseDTO> handleMethodArgumentNotValidException(EmployeeCustomException exception){
+        ResponseDTO responseDTO = new ResponseDTO("Expection while processing Rest Request",exception.getMessage());
+        return new ResponseEntity<ResponseDTO> (responseDTO,HttpStatus.BAD_REQUEST);
+    }
 }
