@@ -1,29 +1,23 @@
 package com.bridgelabz.controller;
 
-import com.bridgelabz.converter.EmployeeConverter;
 import com.bridgelabz.dto.EmployeeDTO;
 import com.bridgelabz.dto.ResponseDTO;
 import com.bridgelabz.model.Employee;
-import com.bridgelabz.service.EmployeeService;
 import com.bridgelabz.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
+
 
 @RestController
 public class EmployeeController  {
-
     @Autowired
     IEmployeeService iEmployeeService;
-    @Autowired
-    EmployeeConverter employeeConverter;
-
     @PostMapping("/save")
-    public ResponseEntity<ResponseDTO> getEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<ResponseDTO> getEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         Employee addEmployee = iEmployeeService.add(employeeDTO);
         ResponseDTO responseDTO=new ResponseDTO("Employee added successfully", addEmployee);
         return new ResponseEntity(responseDTO, HttpStatus.OK);
@@ -44,7 +38,7 @@ public class EmployeeController  {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseDTO> updateById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
+    public ResponseEntity<ResponseDTO> updateById(@Valid @RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
         ResponseDTO responseDTO=new ResponseDTO("Updated Id successful", iEmployeeService.updateByID(employeeDTO,id));
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
