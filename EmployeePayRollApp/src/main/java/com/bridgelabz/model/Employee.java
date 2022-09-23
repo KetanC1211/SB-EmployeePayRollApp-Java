@@ -24,11 +24,9 @@ public class Employee {
     private double salary;
     private String gender;
     @ElementCollection
-    @CollectionTable
     private List<String> department;
     LocalDate startDate;
     String note;
-
 
     public Employee(Integer id, EmployeeDTO employeeDTO) {
         this.id = id;

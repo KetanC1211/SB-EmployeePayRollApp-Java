@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @Service
-@Transactional
+
 public class EmployeeService implements IEmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -26,8 +26,7 @@ public class EmployeeService implements IEmployeeService {
 
     @Override
     public List<Employee> list() {
-        List<Employee> employeeModels = employeeRepository.findAll();
-        return employeeModels;
+        return employeeRepository.findAll();
     }
     @Override
     public Employee get(Integer id) {
@@ -35,14 +34,14 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public Employee updateByID(EmployeeDTO employeeDTO, Integer id) {
+    public String updateByID(EmployeeDTO employeeDTO, Integer id) {
         if(employeeRepository.findById(id).isPresent()){
             Employee newEmp = new Employee(id, employeeDTO);
-            Employee search = employeeRepository.save(newEmp);
-            return search;
+            employeeRepository.save(newEmp);
+            return "Updated Id "+id+ " successfully";
         }
         else{
-            return null;
+            return "Record not found for "+id+".";
         }
     }
 

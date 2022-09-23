@@ -17,21 +17,21 @@ public class EmployeeController  {
     @Autowired
     IEmployeeService iEmployeeService;
     @PostMapping("/save")
-    public ResponseEntity<ResponseDTO> getEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<ResponseDTO> saveEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         Employee addEmployee = iEmployeeService.add(employeeDTO);
         ResponseDTO responseDTO=new ResponseDTO("Employee added successfully", addEmployee);
         return new ResponseEntity(responseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/displayAll")
-    public ResponseEntity<ResponseDTO> getEmployees() {
+    public ResponseEntity<ResponseDTO> getALlEmployees() {
         List<Employee> employeeModel = iEmployeeService.list();
         ResponseDTO responseDTO=new ResponseDTO("Call for employee successful", employeeModel);
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 
     @GetMapping("/display/{id}")
-    public ResponseEntity<ResponseDTO> getEmployee(@PathVariable int id) {
+    public ResponseEntity<ResponseDTO> getEmployeeByID(@PathVariable int id) {
         Employee employeeModel = iEmployeeService.get(id);
         ResponseDTO responseDTO=new ResponseDTO("Call for Id successful", employeeModel);
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
@@ -39,12 +39,12 @@ public class EmployeeController  {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<ResponseDTO> updateById(@Valid @RequestBody EmployeeDTO employeeDTO, @PathVariable Integer id) {
-        ResponseDTO responseDTO=new ResponseDTO("Updated Id successful", iEmployeeService.updateByID(employeeDTO,id));
+        ResponseDTO responseDTO=new ResponseDTO("Updated "+id+" ...", iEmployeeService.updateByID(employeeDTO,id));
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDTO> delete(@PathVariable Integer id) {
+    public ResponseEntity<ResponseDTO> deleteById(@PathVariable Integer id) {
         ResponseDTO responseDTO=new ResponseDTO("Deleting "+id+"...", iEmployeeService.delete(id));
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
