@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-
+@CrossOrigin
 @RestController
 public class EmployeeController  {
     @Autowired
@@ -34,6 +34,13 @@ public class EmployeeController  {
     public ResponseEntity<ResponseDTO> getEmployeeByID(@PathVariable int id) {
         Employee employeeModel = iEmployeeService.get(id);
         ResponseDTO responseDTO=new ResponseDTO("Call for Id successful", employeeModel);
+        return new ResponseEntity<>(responseDTO,HttpStatus.OK);
+    }
+
+    @GetMapping("/getByDepartment/{department}")
+    public ResponseEntity<ResponseDTO> getEmployeeByID(@PathVariable String department) {
+        List<Employee> employeeModel = iEmployeeService.getEmpByDepartment(department);
+        ResponseDTO responseDTO=new ResponseDTO("Get Record by Department", employeeModel);
         return new ResponseEntity<>(responseDTO,HttpStatus.OK);
     }
 

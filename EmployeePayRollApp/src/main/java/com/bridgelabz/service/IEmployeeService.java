@@ -18,4 +18,6 @@ public interface IEmployeeService {
 
     Object updateByID(EmployeeDTO employeeDTO, Integer id);
 
+    public List<Employee> getEmpByDepartment(String department);
+
 }

@@ -6,8 +6,6 @@ import com.bridgelabz.model.Employee;
 import com.bridgelabz.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 
@@ -46,6 +44,12 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
+    public List<Employee> getEmpByDepartment(String department) {
+        List<Employee> empList =employeeRepository.findByDepartment(department);
+        return empList;
+    }
+
+    @Override
     public String delete(Integer id) {
         if(employeeRepository.findById(id).isPresent()){
             employeeRepository.deleteById(id);
@@ -54,4 +58,5 @@ public class EmployeeService implements IEmployeeService {
         return "Record Not found";
 
     }
+
 }
